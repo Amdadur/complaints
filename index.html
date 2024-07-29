@@ -3,11 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/style.css" />
+    <title>Complaint Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-    <script src="/script.js"></script>
+    <div class="container">
+
+        <h1>Complaint Dashboard</h1>
+
+        <label for="timescale">Choose a timescale:</label>
+        <select name="timescale" id="timescale">
+            <option value="thisweek">This Week</option>
+            <option value="lastweek">Last Week</option>
+            <option value="month">Last Month</option>
+
+        </select>
+
+        <label for="region">Choose a region:</label>
+        <select name="region" id="region">
+            <option value="all">All</option>
+            <option value="se">SE</option>
+            <option value="sw">SW</option>
+        </select>
+        
+        <div class="chart-container">
+            <canvas id="myChart" width="800" height="400"></canvas>
+        </div>
+
+    </div> 
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

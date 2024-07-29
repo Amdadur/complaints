@@ -1,0 +1,165 @@
+document.addEventListener("DOMContentLoaded", function () {
+    let currentChart;
+
+    fetch("db1.xlsx")
+        .then((response) => response.arrayBuffer())
+        .then((data) => {
+            const workbook = XLSX.read(data, { type: "array" });
+            const sheetName = workbook.SheetNames[5]; // Assuming the data is on the 6th sheet (index 5)
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet);
+
+            document
+                .getElementById("weeklyButton")
+                .addEventListener("click", () => {
+                    if (currentChart) {
+                        currentChart.destroy();
+                    }
+                    currentChart = createBarChart(
+                        json,
+                        "week",
+                        [
+                            "week open all",
+                            "week new all",
+                            "week closed all",
+                            "week total all",
+                        ],
+                        ["Open", "New", "Closed", "Total"]
+                    );
+                });
+
+            document
+                .getElementById("monthlyButton")
+                .addEventListener("click", () => {
+                    if (currentChart) {
+                        currentChart.destroy();
+                    }
+                    currentChart = createBarChart(
+                        json,
+                        "month",
+                        [
+                            "month open",
+                            "month new",
+                            "month closed",
+                            "month total",
+                        ],
+                        ["Open", "New", "Closed", "Total"]
+                    );
+                });
+        });
+});
+
+function createBarChart(data, labelKey, valueKeys, labels) {
+    const labelsData = data.map((row) => row[labelKey]);
+    const datasets = valueKeys.map((key, index) => {
+        return {
+            label: labels[index],
+            data: data.map((row) => parseFloat(row[key])),
+            backgroundColor: `rgba(${75 + index * 30}, ${192 - index * 40}, ${
+                192 - index * 30
+            }, 0.2)`,
+            borderColor: `rgba(${75 + index * 30}, ${192 - index * 40}, ${
+                192 - index * 30
+            }, 1)`,
+            borderWidth: 1,
+        };
+    });
+
+    const ctx = document.getElementById("myChart").getContext("2d");
+    return new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labelsData,
+            datasets: datasets,
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text:
+                            labelKey.charAt(0).toUpperCase() +
+                            labelKey.slice(1),
+                        color: "#911",
+                        font: {
+                            family: "Times",
+                            size: 20,
+                            weight: "bold",
+                            lineHeight: 1.2,
+                        },
+                        padding: { top: 10, left: 0, right: 0, bottom: 0 },
+                    },
+                    grid: {
+                        display: true,
+                        color: "rgba(200, 200, 200, 0.3)",
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        color: "#000",
+                        font: {
+                            size: 14,
+                        },
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: "Values",
+                        color: "#191",
+                        font: {
+                            family: "Times",
+                            size: 20,
+                            weight: "bold",
+                            lineHeight: 1.2,
+                        },
+                        padding: { top: 30, left: 0, right: 0, bottom: 0 },
+                    },
+                    grid: {
+                        display: true,
+                        color: "rgba(200, 200, 200, 0.3)",
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        color: "#000",
+                        font: {
+                            size: 14,
+                        },
+                    },
+                },
+            },
+        },
+    });
+}
+
+--
+
+        
+            document.getElementById('dailyAllButton').addEventListener('click', () => {
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                currentChart = createBarChart(json, "daily", ["daily open all", "daily new all", "daily closed all", "daily total all"], ["Open", "New", "Closed", "Total"]);
+            });
+
+            document.getElementById('dailySEButton').addEventListener('click', () => {
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                currentChart = createBarChart(json, "daily", ["daily open se", "daily new se", "daily closed se", "daily total se"], ["Open", "New", "Closed", "Total"]);
+            });
+
+            document.getElementById('dailySWButton').addEventListener('click', () => {
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                currentChart = createBarChart(json, "daily", ["daily open sw", "daily new sw", "daily closed sw", "daily total sw"], ["Open", "New", "Closed", "Total"]);
+            });
+
+            document.getElementById('weeklyAllButton').addEventListener('click', () => {
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                currentChart = createBarChart(json, "weekly", ["weekly open all", "weekly new all", "weekly closed all", "weekly total all"], ["Open", "New", "Closed", "Total"]);
+            });
